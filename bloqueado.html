@@ -2,51 +2,190 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Tu sorpresa 💖</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tu sorpresa 💖</title>
 
   <style>
-    body{
+    :root{
+      --rosa:#d14d72;
+      --rosa-suave:#f8c8d8;
+      --rosa-claro:#ffe4ec;
+      --crema:#fff8f5;
+      --texto:#5a3a3a;
+      --blanco:rgba(255,255,255,0.9);
+      --sombra:0 12px 30px rgba(0,0,0,0.12);
+    }
+
+    *{
+      box-sizing:border-box;
       margin:0;
+      padding:0;
+    }
+
+    body{
       font-family: Arial, sans-serif;
-      background: linear-gradient(to bottom, #ffe4ec, #fff8f5);
+      min-height: 100vh;
+      background: linear-gradient(to bottom, var(--rosa-claro), var(--crema));
+      color: var(--texto);
+      overflow:hidden;
+      position: relative;
+    }
+
+    #fondo-corazones{
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .corazon-fondo{
+      position: absolute;
+      bottom: -30px;
+      opacity: .18;
+      animation: flotar 12s linear forwards;
+    }
+
+    @keyframes flotar{
+      from{
+        transform: translateY(0) scale(1);
+        opacity:.18;
+      }
+      to{
+        transform: translateY(-115vh) scale(1.5);
+        opacity:0;
+      }
+    }
+
+    main{
+      min-height: 100vh;
       display:flex;
       justify-content:center;
       align-items:center;
-      height:100vh;
-      text-align:center;
+      padding: 20px;
+      position: relative;
+      z-index: 1;
     }
 
-    .card{
-      background: white;
-      padding:30px;
-      border-radius:20px;
-      box-shadow:0 10px 25px rgba(0,0,0,0.1);
-      max-width:500px;
+    .bloqueo-card{
+      width:min(820px, 100%);
+      background: rgba(255,255,255,0.86);
+      backdrop-filter: blur(10px);
+      border-radius: 30px;
+      padding: 42px 28px;
+      text-align:center;
+      box-shadow: var(--sombra);
+      animation: aparecer 1.1s ease;
+    }
+
+    @keyframes aparecer{
+      from{
+        opacity:0;
+        transform: translateY(20px) scale(.97);
+      }
+      to{
+        opacity:1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .emoji{
+      font-size: 48px;
+      margin-bottom: 14px;
     }
 
     h1{
-      color:#d14d72;
-      margin-bottom:10px;
+      color: var(--rosa);
+      font-size: clamp(32px, 5vw, 56px);
+      margin-bottom: 14px;
+      line-height:1.2;
+    }
+
+    .texto{
+      font-size: clamp(17px, 2vw, 22px);
+      line-height: 1.7;
+      max-width: 650px;
+      margin: 0 auto 24px;
+    }
+
+    .count-box{
+      background: linear-gradient(to right, #fff7fb, #ffffff);
+      border: 2px solid rgba(209,77,114,.12);
+      border-radius: 24px;
+      padding: 22px 18px;
+      margin-top: 18px;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.06);
+    }
+
+    .count-label{
+      font-size: 18px;
+      color: #7a2e48;
+      font-weight: bold;
+      margin-bottom: 12px;
     }
 
     #countdown{
-      font-size:28px;
-      color:#d14d72;
-      font-weight:bold;
-      margin-top:15px;
+      font-size: clamp(26px, 4vw, 42px);
+      color: var(--rosa);
+      font-weight: bold;
+      line-height: 1.45;
+    }
+
+    .frase{
+      margin-top: 22px;
+      font-size: 18px;
+      color:#7a2e48;
+      font-style: italic;
+    }
+
+    .firma{
+      margin-top: 26px;
+      font-weight: bold;
+      color: var(--rosa);
+      font-size: 20px;
+    }
+
+    @media (max-width: 600px){
+      .bloqueo-card{
+        padding: 30px 18px;
+      }
+
+      .frase{
+        font-size: 16px;
+      }
+
+      #countdown{
+        font-size: 30px;
+      }
     }
   </style>
 </head>
-
 <body>
 
-  <div class="card">
-    <h1>Tu sorpresa aún no se puede abrir 💖</h1>
-    <p>Falta muy poquito para tu regalo, Belén ✨</p>
+  <div id="fondo-corazones"></div>
 
-    <div id="countdown"></div>
-  </div>
+  <main>
+    <div class="bloqueo-card">
+      <div class="emoji">💖</div>
+
+      <h1>Tu sorpresa todavía no se puede abrir</h1>
+
+      <p class="texto">
+        Falta muy poquito para que puedas ver algo que preparé con mucho cariño para ti, Belén ✨
+      </p>
+
+      <div class="count-box">
+        <div class="count-label">Cuenta regresiva para tu regalo 💕</div>
+        <div id="countdown"></div>
+      </div>
+
+      <p class="frase">
+        A veces las cosas más bonitas valen la pena esperarlas un poquito más 💫
+      </p>
+
+      <div class="firma">Con amor, Benjamin 💖</div>
+    </div>
+  </main>
 
   <script>
     const fechaObjetivo = new Date("2026-03-24T00:00:00-03:00");
@@ -66,14 +205,27 @@
       const segundos = Math.floor((diferencia / 1000) % 60);
 
       document.getElementById("countdown").innerHTML =
-        dias + " días<br>" +
-        horas + "h " +
-        minutos + "m " +
-        segundos + "s";
+        `${dias} días<br>${horas}h ${minutos}m ${segundos}s`;
     }
 
     actualizarCuenta();
     setInterval(actualizarCuenta, 1000);
+
+    const fondo = document.getElementById('fondo-corazones');
+
+    function crearCorazonFondo(){
+      const c = document.createElement('div');
+      c.className = 'corazon-fondo';
+      c.innerHTML = Math.random() > 0.5 ? '💖' : '💕';
+      c.style.left = Math.random() * 100 + 'vw';
+      c.style.fontSize = (14 + Math.random() * 20) + 'px';
+      c.style.animationDuration = (8 + Math.random() * 6) + 's';
+      fondo.appendChild(c);
+
+      setTimeout(() => c.remove(), 14000);
+    }
+
+    setInterval(crearCorazonFondo, 900);
   </script>
 
 </body>
