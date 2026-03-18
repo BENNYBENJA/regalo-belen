@@ -2,7 +2,7 @@ export default function middleware(request) {
   const url = new URL(request.url);
 
   // CAMBIA ESTA FECHA POR LA DEL CUMPLEAÑOS
-  const fechaApertura = new Date("2026-04-01T00:00:00-03:00");
+  const fechaApertura = new Date("2026-03-24T00:00:00-03:00");
   const ahora = new Date();
 
   const abierto = ahora >= fechaApertura;
