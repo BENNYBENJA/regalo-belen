@@ -1,44 +1,962 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tu sorpresa está por abrirse 💖</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Para mi gatita 💙</title>
+
+<link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" />
+
+<style>
+  :root{
+    --azul:#3b82f6;
+    --azul-suave:#93c5fd;
+    --azul-claro:#dbeafe;
+    --cielo:#eff6ff;
+    --texto:#1e3a5f;
+    --blanco:rgba(255,255,255,0.92);
+    --sombra:0 10px 30px rgba(0,0,0,0.12);
+    --sombra-fuerte:0 18px 40px rgba(59,130,246,0.18);
+  }
+
+  *{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+  }
+
+  html{
+    scroll-behavior:smooth;
+  }
+
+  body{
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to bottom, var(--azul-claro), var(--cielo));
+    color: var(--texto);
+    overflow-x:hidden;
+  }
+
+  #pantalla-carga{
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle at center, #0f172a, #020617);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    text-align: center;
+    padding: 20px;
+    animation: desaparecerCarga 3s forwards;
+  }
+
+  .carga-contenido{
+    animation: latido 1.8s infinite;
+  }
+
+  .carga-contenido h2{
+    font-size: clamp(28px, 5vw, 48px);
+    margin-bottom: 10px;
+  }
+
+  .carga-contenido p{
+    font-size: 18px;
+    opacity: 0.9;
+  }
+
+  @keyframes desaparecerCarga{
+    0%{opacity:1;}
+    80%{opacity:1;}
+    100%{opacity:0; visibility:hidden;}
+  }
+
+  @keyframes latido{
+    0%,100%{transform:scale(1);}
+    50%{transform:scale(1.03);}
+  }
+
+  #fondo-corazones{
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 0;
+  }
+
+  .corazon-fondo{
+    position: absolute;
+    bottom: -30px;
+    opacity: .16;
+    animation: flotar 12s linear forwards;
+  }
+
+  @keyframes flotar{
+    from{ transform: translateY(0) scale(1); opacity:.16; }
+    to{ transform: translateY(-115vh) scale(1.5); opacity:0; }
+  }
+
+  .contenedor{
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero{
+    min-height: 100vh;
+    padding: 60px 20px 40px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    position: relative;
+  }
+
+  .hero-card{
+    width:min(1050px, 100%);
+    background: rgba(255,255,255,0.84);
+    backdrop-filter: blur(10px);
+    border-radius: 36px;
+    padding: 45px 24px;
+    box-shadow: var(--sombra-fuerte);
+    animation: aparecerHero 1.2s ease;
+    border: 1px solid rgba(255,255,255,0.55);
+  }
+
+  @keyframes aparecerHero{
+    from{ opacity:0; transform: translateY(30px) scale(.97); }
+    to{ opacity:1; transform: translateY(0) scale(1); }
+  }
+
+  .foto-portada{
+    width: min(340px, 85%);
+    height: 340px;
+    object-fit: cover;
+    border-radius: 28px;
+    box-shadow: 0 14px 32px rgba(59,130,246,.22);
+    margin-bottom: 24px;
+    border: 6px solid rgba(255,255,255,0.75);
+  }
+
+  .titulo-principal{
+    font-size: clamp(38px, 6vw, 76px);
+    color: var(--azul);
+    margin-bottom: 16px;
+    line-height:1.08;
+  }
+
+  .subtitulo{
+    font-size: clamp(17px, 2vw, 24px);
+    max-width: 800px;
+    margin: 0 auto 28px;
+    line-height: 1.7;
+  }
+
+  .botones-hero{
+    display:flex;
+    gap:14px;
+    justify-content:center;
+    flex-wrap:wrap;
+    margin-top: 18px;
+  }
+
+  .btn{
+    border:none;
+    border-radius: 999px;
+    padding: 14px 24px;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+    transition: transform .25s ease, box-shadow .25s ease, background .25s ease;
+    box-shadow: 0 8px 18px rgba(0,0,0,.08);
+    text-decoration:none;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  .btn:hover{
+    transform: translateY(-2px) scale(1.03);
+  }
+
+  .btn-principal{
+    background: var(--azul);
+    color:white;
+  }
+
+  .btn-secundario{
+    background: white;
+    color: var(--azul);
+  }
+
+  nav{
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: rgba(147,197,253,0.88);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 10px rgba(0,0,0,.06);
+  }
+
+  nav ul{
+    list-style:none;
+    display:flex;
+    justify-content:center;
+    gap:18px;
+    flex-wrap:wrap;
+    padding:14px 18px;
+  }
+
+  nav a{
+    text-decoration:none;
+    color:#1d4ed8;
+    font-weight:bold;
+    transition:.25s;
+    padding: 8px 12px;
+    border-radius: 999px;
+  }
+
+  nav a:hover,
+  nav a.activo{
+    color:var(--azul);
+    background: rgba(255,255,255,0.6);
+  }
+
+  main{
+    width:min(1100px, calc(100% - 30px));
+    margin: 28px auto 40px;
+  }
+
+  .card{
+    background: var(--blanco);
+    border-radius: 28px;
+    padding: 28px;
+    box-shadow: var(--sombra);
+    margin-bottom: 24px;
+    border: 1px solid rgba(255,255,255,0.6);
+  }
+
+  h2.seccion-titulo{
+    color: var(--azul);
+    font-size: clamp(28px, 4vw, 40px);
+    margin-bottom: 14px;
+  }
+
+  p.texto{
+    line-height: 1.8;
+    font-size: 18px;
+  }
+
+  .contador-box{
+    margin-top: 22px;
+    background: linear-gradient(to right, #f8fbff, #ffffff);
+    border: 2px solid rgba(59,130,246,.14);
+    border-radius: 22px;
+    padding: 18px;
+    text-align:center;
+  }
+
+  .contador-label{
+    font-size:18px;
+    margin-bottom: 10px;
+    color:#1d4ed8;
+    font-weight:bold;
+  }
+
+  .contador{
+    font-size: clamp(21px, 3vw, 30px);
+    color: var(--azul);
+    font-weight: bold;
+    line-height: 1.6;
+  }
+
+  .galeria{
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap:12px;
+    margin-top:18px;
+  }
+
+  .galeria img{
+    width:100%;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 18px;
+    cursor:pointer;
+    transition: transform .3s ease, box-shadow .3s ease;
+    box-shadow: 0 6px 18px rgba(0,0,0,.08);
+  }
+
+  .galeria img:hover{
+    transform: scale(1.04);
+    box-shadow: 0 12px 24px rgba(59,130,246,.18);
+  }
+
+  .carta-box{
+    background: linear-gradient(to bottom, #f8fbff, #ffffff);
+    border:1px solid rgba(59,130,246,.12);
+    border-radius:22px;
+    padding: 24px;
+    margin-top:16px;
+    min-height: 190px;
+    position: relative;
+  }
+
+  .carta-box::before{
+    content:"💙";
+    position:absolute;
+    top: 16px;
+    right: 18px;
+    font-size: 28px;
+    opacity: .45;
+  }
+
+  #texto-carta{
+    font-size: 19px;
+    line-height: 1.9;
+    color:#284b74;
+    padding-right: 28px;
+  }
+
+  .razones-grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap:16px;
+    margin-top:18px;
+  }
+
+  .razon{
+    background:white;
+    border-radius:20px;
+    padding:18px;
+    box-shadow: 0 8px 18px rgba(0,0,0,.07);
+    transition:.3s;
+  }
+
+  .razon:hover{
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(59,130,246,.14);
+  }
+
+  .razon h3{
+    color:var(--azul);
+    margin-bottom:10px;
+    font-size:22px;
+  }
+
+  .timeline{
+    margin-top:18px;
+    display:grid;
+    gap:16px;
+  }
+
+  .momento{
+    background:white;
+    border-left: 6px solid var(--azul);
+    border-radius:18px;
+    padding:18px;
+    box-shadow: 0 8px 18px rgba(0,0,0,.07);
+  }
+
+  .momento h3{
+    color:var(--azul);
+    margin-bottom:8px;
+  }
+
+  .frase-box{
+    margin-top:18px;
+    background:white;
+    border-radius:20px;
+    padding:20px;
+    box-shadow: 0 8px 18px rgba(0,0,0,.07);
+    text-align:center;
+  }
+
+  #frase-romantica{
+    font-size: 22px;
+    color:var(--azul);
+    font-weight:bold;
+    margin-bottom:14px;
+    min-height: 60px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  .cierre{
+    text-align: center;
+    padding: 30px 20px 10px;
+  }
+
+  .cierre h2{
+    color: var(--azul);
+    font-size: clamp(28px, 4vw, 42px);
+    margin-bottom: 12px;
+  }
+
+  .cierre p{
+    font-size: 19px;
+    line-height: 1.8;
+    max-width: 700px;
+    margin: 0 auto 18px;
+  }
+
+  .sorpresa-modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    background: rgba(0,0,0,.68);
+    backdrop-filter: blur(6px);
+    justify-content:center;
+    align-items:center;
+    z-index:1000;
+    padding:20px;
+  }
+
+  .sorpresa-contenido{
+    width:min(1150px, 100%);
+    max-height: 90vh;
+    overflow:auto;
+    background: linear-gradient(to bottom, #eef6ff, #ffffff);
+    border-radius: 28px;
+    box-shadow: 0 15px 45px rgba(0,0,0,.3);
+    padding: 28px;
+    position:relative;
+    animation: abrirModal .4s ease;
+  }
+
+  @keyframes abrirModal{
+    from{ opacity:0; transform: scale(.9); }
+    to{ opacity:1; transform: scale(1); }
+  }
+
+  .cerrar-sorpresa{
+    position:absolute;
+    top: 12px;
+    right: 18px;
+    font-size: 34px;
+    color:#2563eb;
+    cursor:pointer;
+    font-weight:bold;
+  }
+
+  .sorpresa-contenido h2{
+    color: var(--azul);
+    text-align:center;
+    font-size: clamp(28px, 4vw, 42px);
+    margin-bottom: 10px;
+  }
+
+  .subtitulo-sorpresa{
+    text-align:center;
+    margin-bottom: 24px;
+    font-size: 18px;
+    color:#1d4ed8;
+  }
+
+  .tarjetas-sorpresa{
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap:18px;
+  }
+
+  .tarjeta{
+    background:white;
+    border-radius:20px;
+    overflow:hidden;
+    box-shadow: 0 8px 20px rgba(0,0,0,.08);
+    transition: transform .3s ease, box-shadow .3s ease;
+  }
+
+  .tarjeta:hover{
+    transform: translateY(-6px) scale(1.015);
+    box-shadow: 0 14px 26px rgba(59,130,246,.18);
+  }
+
+  .tarjeta img{
+    width:100%;
+    height:240px;
+    object-fit:cover;
+    display:block;
+  }
+
+  .tarjeta h3{
+    color:var(--azul);
+    font-size: 24px;
+    margin: 16px 16px 8px;
+  }
+
+  .tarjeta p{
+    margin: 0 16px 18px;
+    line-height: 1.6;
+    font-size: 16px;
+  }
+
+  .visor{
+    display:none;
+    position:fixed;
+    inset:0;
+    background: rgba(0,0,0,.88);
+    backdrop-filter: blur(4px);
+    justify-content:center;
+    align-items:center;
+    z-index:999;
+    padding:20px;
+  }
+
+  .visor img{
+    max-width: min(70vw, 900px);
+    max-height: 82vh;
+    border-radius: 24px;
+    box-shadow: 0 14px 35px rgba(59,130,246,.28);
+  }
+
+  #corazones-contenedor{
+    position: fixed;
+    inset: 0;
+    pointer-events:none;
+    z-index: 1002;
+    overflow:hidden;
+  }
+
+  .corazon-modal{
+    position:absolute;
+    bottom:-20px;
+    animation: subirModal 4.5s linear forwards;
+  }
+
+  @keyframes subirModal{
+    from{ transform: translateY(0) scale(1); opacity:.95; }
+    to{ transform: translateY(-110vh) scale(1.6); opacity:0; }
+  }
+
+  #btn-arriba{
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 50;
+    display: none;
+    border:none;
+    border-radius: 999px;
+    width: 52px;
+    height: 52px;
+    font-size: 22px;
+    background: var(--azul);
+    color: white;
+    cursor:pointer;
+    box-shadow: 0 10px 22px rgba(59,130,246,.25);
+  }
+
+  footer{
+    text-align:center;
+    padding: 24px 18px 36px;
+    color:#1d4ed8;
+    font-weight:bold;
+  }
+
+  @media (max-width: 768px){
+    .hero{ padding-top: 30px; min-height: auto; }
+    .hero-card{ padding: 30px 18px; }
+    .foto-portada{ height: 280px; }
+    .galeria img{ height: 180px; }
+    .tarjeta img{ height: 200px; }
+    .visor img{ max-width: 92vw; max-height: 78vh; }
+    .contador{ font-size: 22px; }
+  }
+</style>
 </head>
 <body>
-  <main class="pantalla-bloqueo">
-    <div class="bloqueo-card">
-      <h1>Tu sorpresa todavía no se puede abrir 💖</h1>
-      <p>Falta muy poquito para tu regalo especial, Belén ✨</p>
-      <p id="countdown"></p>
+
+<div id="pantalla-carga">
+  <div class="carga-contenido">
+    <h2>Preparando tu sorpresa, mi gatita... 💙</h2>
+    <p>Espera un poquito ✨</p>
+  </div>
+</div>
+
+<div id="fondo-corazones"></div>
+
+<div class="contenedor">
+
+  <section class="hero" id="top">
+    <div class="hero-card">
+      <img class="foto-portada" src="imagenes/foto1.jpg" alt="Foto principal">
+      <h1 class="titulo-principal">Feliz cumpleaños, mi gatita 💙</h1>
+      <p class="subtitulo">
+        Este regalo fue hecho con mucho amor para ti.  
+        Quería darte algo distinto, bonito y lleno de nuestros recuerdos 💙
+      </p>
+
+      <div class="botones-hero">
+        <button class="btn btn-principal" id="boton-sorpresa">Abrir sorpresa 💙</button>
+        <a class="btn btn-secundario" href="#galeria">Ver nuestros momentos 📸</a>
+      </div>
     </div>
+  </section>
+
+  <nav>
+    <ul>
+      <li><a href="#inicio">Inicio</a></li>
+      <li><a href="#historia">Nuestra historia</a></li>
+      <li><a href="#galeria">Galería</a></li>
+      <li><a href="#carta">Carta</a></li>
+      <li><a href="#amo">Lo que amo</a></li>
+      <li><a href="#momentos">Momentos</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <section class="card" id="inicio" data-aos="fade-up">
+      <h2 class="seccion-titulo">Para ti, mi gatita 💙</h2>
+      <p class="texto">
+        Hoy celebramos a la persona más especial de mi vida.  
+        Gracias por existir, por tu sonrisa, por tu ternura y por todo lo bonito que me haces sentir 💙
+      </p>
+    </section>
+
+    <section class="card" id="historia" data-aos="fade-right">
+      <h2 class="seccion-titulo">Nuestra historia 💫</h2>
+      <p class="texto">
+        Desde que llegaste a mi vida, todo cambió.  
+        Cada momento contigo se volvió especial, cada recuerdo contigo vale demasiado para mí
+        y cada día a tu lado se siente como algo que quiero guardar para siempre 💙
+      </p>
+
+      <div class="contador-box">
+        <div class="contador-label">💙 Llevamos juntos:</div>
+        <div id="contador-tiempo" class="contador"></div>
+      </div>
+    </section>
+
+    <section class="card" id="galeria" data-aos="fade-up">
+      <h2 class="seccion-titulo">Nuestros momentos 📸</h2>
+      <p class="texto">
+        Aquí están algunos de mis recuerdos favoritos contigo.  
+        Cada foto tiene algo especial porque estás tú, mi gatita 💙
+      </p>
+
+      <div class="galeria">
+        <img src="imagenes/foto1.jpg" alt="Foto 1">
+        <img src="imagenes/foto2.jpg" alt="Foto 2">
+        <img src="imagenes/foto3.jpg" alt="Foto 3">
+        <img src="imagenes/foto4.jpg" alt="Foto 4">
+        <img src="imagenes/foto5.jpg" alt="Foto 5">
+        <img src="imagenes/foto6.jpg" alt="Foto 6">
+        <img src="imagenes/foto7.jpg" alt="Foto 7">
+        <img src="imagenes/foto8.jpg" alt="Foto 8">
+        <img src="imagenes/foto9.jpg" alt="Foto 9">
+        <img src="imagenes/foto10.jpg" alt="Foto 10">
+        <img src="imagenes/foto11.jpg" alt="Foto 11">
+      </div>
+    </section>
+
+    <section class="card" id="carta" data-aos="fade-left">
+      <h2 class="seccion-titulo">Una carta para ti 💌</h2>
+      <div class="carta-box">
+        <p id="texto-carta"></p>
+      </div>
+    </section>
+
+    <section class="card" id="amo" data-aos="fade-up">
+      <h2 class="seccion-titulo">Lo que más amo de ti 💙</h2>
+      <div class="razones-grid">
+        <div class="razon">
+          <h3>Tu sonrisa ✨</h3>
+          <p>Porque ilumina mis días y siempre logra hacerme sentir mejor.</p>
+        </div>
+        <div class="razon">
+          <h3>Tu forma de ser 💙</h3>
+          <p>Porque eres una persona hermosa por dentro y por fuera.</p>
+        </div>
+        <div class="razon">
+          <h3>Cómo me haces sentir </h3>
+          <p>Porque contigo me siento querido, tranquilo y feliz.</p>
+        </div>
+        <div class="razon">
+          <h3>Tu compañía 🌷</h3>
+          <p>Porque estar contigo hace que todo se sienta más bonito.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" id="momentos" data-aos="fade-up">
+      <h2 class="seccion-titulo">Nuestros recuerdos favoritos 💫</h2>
+      <div class="timeline">
+        <div class="momento">
+          <h3>El día en que comenzamos 💙</h3>
+          <p>Desde el 27 de septiembre de 2025 mi fue lo mejor que me paso.</p>
+        </div>
+        <div class="momento">
+          <h3>Cada salida contigo 🌙</h3>
+          <p>Porque no importa dónde estemos, si estoy contigo todo se siente especial, aun que estemos a mucha distancia.</p>
+        </div>
+        <div class="momento">
+          <h3>Nuestras fotos 📸</h3>
+          <p>Porque cada una guarda una parte de nosotros y de lo bonito que hemos vivido.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" data-aos="zoom-in">
+      <h2 class="seccion-titulo">Una frase para ti 💌</h2>
+      <div class="frase-box">
+        <div id="frase-romantica">Haz clic para ver una frase 💙</div>
+        <button class="btn btn-principal" id="btn-frase">Otra frase 💙</button>
+      </div>
+    </section>
+
+    <section class="card cierre" data-aos="fade-up">
+      <h2>Gracias por estar en mi vida, mi gatita 💙</h2>
+      <p>
+        Espero que este pequeño regalo te saque una sonrisa y te recuerde lo especial que eres para mí.  
+        Feliz cumpleaños, mi gatita mas hermosaaa 💙
+      </p>
+      <a class="btn btn-principal" href="#top">Volver a ver la sorpresa ✨</a>
+    </section>
   </main>
 
-  <script>
-    // CAMBIA ESTA FECHA POR LA DEL CUMPLEAÑOS
-    const fechaObjetivo = new Date("2026-04-01T00:00:00-03:00");
+  <footer data-aos="fade-up">
+    Con amor, Benjamin 💙
+  </footer>
+</div>
 
-    function actualizarCuenta() {
-      const ahora = new Date();
-      const diferencia = fechaObjetivo - ahora;
+<div id="visor" class="visor">
+  <img id="imgGrande" alt="Foto ampliada">
+</div>
 
-      if (diferencia <= 0) {
-        document.getElementById("countdown").innerHTML = "La sorpresa ya está lista 💕";
+<div id="sorpresa-modal" class="sorpresa-modal">
+  <div class="sorpresa-contenido">
+    <span id="cerrar-sorpresa" class="cerrar-sorpresa">&times;</span>
+
+    <h2>Una sorpresa para ti, mi gatita 💙</h2>
+    <p class="subtitulo-sorpresa">
+      Porque mereces algo bonito, especial y hecho con amor 💙
+    </p>
+
+    <div class="tarjetas-sorpresa">
+      <div class="tarjeta">
+        <img src="imagenes/foto1.jpg" alt="Recuerdo 1">
+        <h3>Un recuerdo bonito 🌸</h3>
+        <p>Uno de mis momentos favoritos contigo, porque a tu lado todo se vuelve más lindo.</p>
+      </div>
+
+      <div class="tarjeta">
+        <img src="imagenes/foto2.jpg" alt="Recuerdo 2">
+        <h3>Mi lugar favorito 💫</h3>
+        <p>No es un lugar, eres tú. Estar contigo siempre se siente como estar en casa.</p>
+      </div>
+
+      <div class="tarjeta">
+        <img src="imagenes/foto3.jpg" alt="Recuerdo 3">
+        <h3>Feliz cumpleaños, mi gatita 🎂</h3>
+        <p>Hoy celebro tu vida, tu sonrisa y lo feliz que me hace tenerte conmigo.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="corazones-contenedor"></div>
+<button id="btn-arriba">↑</button>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/typed.js@2.1.0/dist/typed.umd.js"></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+<script>
+  AOS.init({
+    duration: 1000,
+    once: true
+  });
+
+  setTimeout(() => {
+    confetti({
+      particleCount: 140,
+      spread: 100,
+      origin: { y: 0.6 },
+      colors: ['#3b82f6', '#93c5fd', '#dbeafe', '#ffffff']
+    });
+  }, 3000);
+
+  const fondo = document.getElementById('fondo-corazones');
+
+  function crearCorazonFondo(){
+    const c = document.createElement('div');
+    c.className = 'corazon-fondo';
+    const simbolos = ['💙','🩵','🤍'];
+    c.innerHTML = simbolos[Math.floor(Math.random() * simbolos.length)];
+    c.style.left = Math.random() * 100 + 'vw';
+    c.style.fontSize = (14 + Math.random() * 20) + 'px';
+    c.style.animationDuration = (8 + Math.random() * 6) + 's';
+    fondo.appendChild(c);
+    setTimeout(() => c.remove(), 14000);
+  }
+
+  setInterval(crearCorazonFondo, 900);
+
+  function actualizarContador() {
+    const inicio = new Date(2025, 8, 27, 0, 0, 0);
+    const ahora = new Date();
+
+    let años = ahora.getFullYear() - inicio.getFullYear();
+    let meses = ahora.getMonth() - inicio.getMonth();
+    let dias = ahora.getDate() - inicio.getDate();
+
+    let horas = ahora.getHours();
+    let minutos = ahora.getMinutes();
+    let segundos = ahora.getSeconds();
+
+    if (dias < 0) {
+      meses--;
+      const ultimoMes = new Date(ahora.getFullYear(), ahora.getMonth(), 0).getDate();
+      dias += ultimoMes;
+    }
+
+    if (meses < 0) {
+      años--;
+      meses += 12;
+    }
+
+    horas = String(horas).padStart(2, '0');
+    minutos = String(minutos).padStart(2, '0');
+    segundos = String(segundos).padStart(2, '0');
+
+    document.getElementById("contador-tiempo").innerHTML =
+      `${años} años, ${meses} meses, ${dias} días <br> ⏳ ${horas}h ${minutos}m ${segundos}s 💙`;
+  }
+
+  actualizarContador();
+  setInterval(actualizarContador, 1000);
+
+  new Typed('#texto-carta', {
+    strings: [
+      'Feliz cumpleaños, mi gatita 💙 Gracias por estar en mi vida, por tu sonrisa, por tu cariño y por hacer cada día más bonito. Eres una persona demasiado especial para mí y espero hacerte feliz siempre 💙'
+    ],
+    typeSpeed: 34,
+    showCursor: false
+  });
+
+  const frases = [
+    'Eres mi lugar favorito 💙',
+    'Contigo todo se siente más bonito 🩵',
+    'Mi parte favorita del día siempre eres tú ✨',
+    'Gracias por existir y por estar conmigo 🤍',
+    'Si te tengo a ti, lo tengo todo 💫'
+  ];
+
+  const fraseRomantica = document.getElementById('frase-romantica');
+  const btnFrase = document.getElementById('btn-frase');
+
+  function nuevaFrase(){
+    const random = Math.floor(Math.random() * frases.length);
+    fraseRomantica.innerHTML = frases[random];
+  }
+
+  btnFrase.addEventListener('click', nuevaFrase);
+  nuevaFrase();
+
+  const imagenes = document.querySelectorAll('.galeria img');
+  const visor = document.getElementById('visor');
+  const imgGrande = document.getElementById('imgGrande');
+
+  imagenes.forEach(img => {
+    img.addEventListener('click', () => {
+      visor.style.display = 'flex';
+      imgGrande.src = img.src;
+    });
+  });
+
+  visor.addEventListener('click', () => {
+    visor.style.display = 'none';
+  });
+
+  const boton = document.getElementById('boton-sorpresa');
+  const modal = document.getElementById('sorpresa-modal');
+  const cerrar = document.getElementById('cerrar-sorpresa');
+  const contenedor = document.getElementById('corazones-contenedor');
+
+  boton.addEventListener('click', () => {
+    modal.style.display = 'flex';
+    lanzarCorazonesModal();
+    lanzarConfeti();
+  });
+
+  cerrar.addEventListener('click', () => {
+    modal.style.display = 'none';
+  });
+
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      modal.style.display = 'none';
+    }
+  });
+
+  function lanzarCorazonesModal(){
+    for(let i = 0; i < 28; i++){
+      const c = document.createElement('div');
+      c.className = 'corazon-modal';
+      const simbolos = ['💙','🩵','🤍'];
+      c.innerHTML = simbolos[Math.floor(Math.random() * simbolos.length)];
+      c.style.left = Math.random() * 100 + 'vw';
+      c.style.fontSize = (18 + Math.random() * 22) + 'px';
+      c.style.animationDuration = (3 + Math.random() * 2.5) + 's';
+      contenedor.appendChild(c);
+      setTimeout(() => c.remove(), 5000);
+    }
+  }
+
+  function lanzarConfeti(){
+    const duracion = 2200;
+    const fin = Date.now() + duracion;
+
+    const intervalo = setInterval(() => {
+      if (Date.now() > fin) {
+        clearInterval(intervalo);
         return;
       }
 
-      const dias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
-      const horas = Math.floor((diferencia / (1000 * 60 * 60)) % 24);
-      const minutos = Math.floor((diferencia / (1000 * 60)) % 60);
-      const segundos = Math.floor((diferencia / 1000) % 60);
+      confetti({
+        particleCount: 18,
+        startVelocity: 30,
+        spread: 75,
+        origin: { x: Math.random(), y: Math.random() * 0.5 },
+        colors: ['#3b82f6', '#93c5fd', '#dbeafe', '#ffffff']
+      });
+    }, 180);
+  }
 
-      document.getElementById("countdown").innerHTML =
-        `${dias} días, ${horas} horas, ${minutos} minutos y ${segundos} segundos 💕`;
+  const secciones = document.querySelectorAll("main section[id]");
+  const links = document.querySelectorAll("nav a");
+
+  window.addEventListener("scroll", () => {
+    let actual = "";
+
+    secciones.forEach(seccion => {
+      const top = seccion.offsetTop - 120;
+      const height = seccion.offsetHeight;
+      if (scrollY >= top && scrollY < top + height) {
+        actual = seccion.getAttribute("id");
+      }
+    });
+
+    links.forEach(link => {
+      link.classList.remove("activo");
+      if (link.getAttribute("href") === "#" + actual) {
+        link.classList.add("activo");
+      }
+    });
+  });
+
+  const btnArriba = document.getElementById("btn-arriba");
+
+  window.addEventListener("scroll", () => {
+    if (window.scrollY > 500) {
+      btnArriba.style.display = "block";
+    } else {
+      btnArriba.style.display = "none";
     }
+  });
 
-    actualizarCuenta();
-    setInterval(actualizarCuenta, 1000);
-  </script>
+  btnArriba.addEventListener("click", () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+</script>
 </body>
 </html>
