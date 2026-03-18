@@ -6,14 +6,12 @@ export default function middleware(request) {
 
   const abierto = ahora >= fechaApertura;
 
-  // Antes del cumpleaños
   if (!abierto) {
     if (url.pathname === "/" || url.pathname === "/regalo.html") {
       return Response.redirect(new URL("/bloqueado.html", request.url));
     }
   }
 
-  // Después del cumpleaños
   if (abierto) {
     if (url.pathname === "/" || url.pathname === "/bloqueado.html") {
       return Response.redirect(new URL("/regalo.html", request.url));
