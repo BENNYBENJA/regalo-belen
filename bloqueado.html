@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tu sorpresa está por abrirse 💖</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="pantalla-bloqueo">
+    <div class="bloqueo-card">
+      <h1>Tu sorpresa todavía no se puede abrir 💖</h1>
+      <p>Falta muy poquito para tu regalo especial, Belén ✨</p>
+      <p id="countdown"></p>
+    </div>
+  </main>
+
+  <script>
+    // CAMBIA ESTA FECHA POR LA DEL CUMPLEAÑOS
+    const fechaObjetivo = new Date("2026-04-01T00:00:00-03:00");
+
+    function actualizarCuenta() {
+      const ahora = new Date();
+      const diferencia = fechaObjetivo - ahora;
+
+      if (diferencia <= 0) {
+        document.getElementById("countdown").innerHTML = "La sorpresa ya está lista 💕";
+        return;
+      }
+
+      const dias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
+      const horas = Math.floor((diferencia / (1000 * 60 * 60)) % 24);
+      const minutos = Math.floor((diferencia / (1000 * 60)) % 60);
+      const segundos = Math.floor((diferencia / 1000) % 60);
+
+      document.getElementById("countdown").innerHTML =
+        `${dias} días, ${horas} horas, ${minutos} minutos y ${segundos} segundos 💕`;
+    }
+
+    actualizarCuenta();
+    setInterval(actualizarCuenta, 1000);
+  </script>
+</body>
+</html>
